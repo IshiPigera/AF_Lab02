@@ -96,16 +96,24 @@
             console.log(value);
          });
 
+
          //Q4 Answer
          //We can use async/await for more readability of the code
          async function print(){
             let value = await getValue();
+            try{
             value = await getNewValue(value);
+            } catch (e){
+                console.error(e);
+                }finally{
+                console.log('Execution finished');
+                }
             value = setValue(value);
             console.log(value);
          }
 
          print();
+
     </script>
 
 
