@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SLIIT</title>
+</head>
+<body>
+
+    <script type="text/javascript">
+    //Q1 Answer
+    //Step 1 - Output = 0
+    //It does not wait till the setTimeout function getting executed. Instead it returns the value. So 0
+        function getValue(){
+            let value = 0;
+            setTimeout(function() {
+                value = 10;
+                },1000);
+                return value;
+        }
+
+        console.log(getValue());
+
+     //Step 2
+     //Callback
+     function getValue(callback){
+        let value = 0;
+        setTimeout(function(){
+            value = 10;
+            callback(value);
+<!--            Without putting callback, we can simply add console.log(value); in here.-->
+<!--            But it's coupling. If you want to print that value not to print to console but to save it to a file-->
+<!--            you need to modify it. But in callback you don't have that problem.-->
+            },1000)
+      }
+
+         getValue(function(value){
+            console.log(value);
+         });
+
+         //Step 3
+         //This way is kind of messy. Not user-friendly. This is callback hell.
+        function getValue(callback){
+            let value = 0;
+            setTimeout(function(){
+                value = 10;
+                callback(value);
+            },1000)
+        }
+
+        function getNewValue(value,callback){
+            setTimeout(function(){
+                callback(value*100);
+            },1000)
+        }
+
+
+         getValue(function(value){
+            getNewValue(value, function(newValue){
+            console.log(newValue);
+            }
+            );
+         });
+
+         //Step 4
+         //Introducing promises
+         function getValue(){
+            let value = 0;
+            return new Promise(function(resolve, reject){
+            setTimeout(function(){
+                value = 10;
+                resolve(value);
+            },1000)
+            });
+        }
+
+        function getNewValue(value){
+            return new Promise(function(resolve, reject) {
+            setTimeout(function(){
+                resolve(value*100);
+            },1000)
+            });
+        }
+
+        function setValue(value){
+            return value+1000;
+        }
+
+
+         getValue().then(function(value){     // this is the function by the system under need that will bind to under resolved
+            return getNewValue(value);
+         }).then(function (value){
+            return setValue(value);
+         }).then(function(value){
+            console.log(value);
+         });
+
+         //Q4 Answer
+         //We can use async/await for more readability of the code
+         async function print(){
+            let value = await getValue();
+            value = await getNewValue(value);
+            value = setValue(value);
+            console.log(value);
+         }
+
+         print();
+    </script>
+
+
+</body>
+</html>
